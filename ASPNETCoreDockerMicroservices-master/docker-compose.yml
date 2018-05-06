@@ -5,12 +5,12 @@ services:
   webmvc:
     image: web 
     build:
-      context: ./web
+      context: ./Web
       dockerfile: Dockerfile.debug
     ports: 
-    - "8080:80"
+    - "8085:80"
     volumes: 
-      - ./web/bin/pub/:/app
+      - ./Web/bin/pub/:/app
     container_name: web
     depends_on:
       - applicants.api
@@ -20,14 +20,14 @@ services:
   applicants.api:
     image: applicants.api
     environment:
-      - ConnectionString=Initial Catalog=dotnetgigs.applicants;Data Source=.;Integrated Security=SSPI;
+      - ConnectionString=Server=sql.data;User=sa;Password=Pass@word;Database=dotnetgigs.applicants;
     build:
-      context: ./services/applicants.api
+      context: ./Services/Applicants.Api
       dockerfile: Dockerfile.debug
     ports: 
     - "8081:80"
     volumes: 
-      - ./services/applicants.api/bin/pub/:/app
+      - ./Services/Applicants.Api/bin/pub/:/app
     container_name: applicants.api
     depends_on:
       - sql.data
@@ -36,14 +36,14 @@ services:
   jobs.api:
     image: jobs.api
     environment:
-      - ConnectionString=Initial Catalog=dotnetgigs.applicants;Data Source=.;Integrated Security=SSPI;   
+      - ConnectionString=Server=sql.data;User=sa;Password=Pass@word;Database=dotnetgigs.applicants; 
     build:
-      context: ./services/jobs.api
+      context: ./Services/Jobs.Api
       dockerfile: Dockerfile.debug
     ports: 
     - "8083:80"
     volumes: 
-      - ./services/jobs.api/bin/pub/:/app
+      - ./Services/Jobs.api/bin/pub/:/app
     container_name: jobs.api
     depends_on:
       - sql.data
@@ -54,12 +54,12 @@ services:
     environment:
       - RedisHost=127.0.0.1:6379
     build:
-      context: ./services/identity.api
+      context: ./Services/Identity.Api
       dockerfile: Dockerfile.debug
     ports: 
     - "8084:80"
     volumes: 
-      - ./services/identity.api/bin/pub/:/app
+      - ./Services/Identity.api/bin/pub/:/app
     container_name: identity.api
     depends_on:
       - user.data       
